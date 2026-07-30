@@ -11,6 +11,9 @@
   const modalTitle = $("#modalTitle");
   const modalContent = $("#modalContent");
   const toast = $("#toast");
+  const zoneSelect = $("#zoneSelect");
+  const centerSelect = $("#centerSelect");
+  const savedZonePanel = $("#savedZonePanel");
   let deferredPrompt = null;
 
   function escapeHtml(value = "") {
@@ -67,7 +70,7 @@
     modalContent.innerHTML = `
       <p>${escapeHtml(zone.description)}</p>
       <div class="center-list">${zone.centers.map(centerMarkup).join("")}</div>
-      <div class="data-note"><strong>Importante:</strong> esta ficha es informativa y preliminar. Las prioridades serán validadas en asambleas, recorridos y fuentes oficiales.</div>
+      <div class="data-note"><strong>Importante:</strong> esta ficha es informativa y preliminar. Las prioridades serán validadas con fuentes oficiales y trabajo territorial.</div>
     `;
     dialog.showModal();
     document.body.style.overflow = "hidden";
@@ -102,14 +105,11 @@
   }
 
   function bindExternalLinks() {
-    const waLinks = ["#whatsHero", "#whatsQuick", "#whatsStory", "#whatsDocs", "#whatsBand", "#whatsappFloat"];
-    waLinks.forEach(sel => {
+    ["#whatsHero", "#whatsQuick", "#whatsStory", "#whatsBand"].forEach(sel => {
       const el = $(sel);
-      if (!el) return;
-      el.href = buildWhatsAppUrl();
+      if (el) el.href = buildWhatsAppUrl();
     });
-
-    ["#facebookQuick", "#facebookStory", "#facebookDocs", "#facebookFooter"].forEach(sel => {
+    ["#facebookQuick", "#facebookStory", "#facebookFooter"].forEach(sel => {
       const el = $(sel);
       if (el) el.href = config.facebookUrl;
     });
@@ -145,24 +145,77 @@
     });
   }
 
+  function populateZoneSelectors() {
+    zoneSelect.innerHTML = `<option value="">Seleccionar zona</option>` + data.zones.map(zone => `<option value="${escapeHtml(zone.id)}">${escapeHtml(zone.name)}</option>`).join("");
+
+    zoneSelect.addEventListener("change", () => {
+      const zone = data.zones.find(item => item.id === zoneSelect.value);
+      centerSelect.innerHTML = `<option value="">Seleccionar territorio</option>`;
+      centerSelect.disabled = !zone;
+      if (!zone) return;
+      centerSelect.innerHTML += zone.centers.map(center => `<option value="${escapeHtml(center.name)}">${escapeHtml(center.name)}</option>`).join("");
+    });
+
+    $("#saveZone").addEventListener("click", () => {
+      if (!zoneSelect.value || !centerSelect.value) {
+        showToast("Selecciona una zona y un territorio.");
+        return;
+      }
+      const selection = {zoneId: zoneSelect.value, centerName: centerSelect.value};
+      localStorage.setItem("jimmyIsidroMyZone", JSON.stringify(selection));
+      renderSavedZone(selection);
+      showToast("Tu zona quedó guardada en este celular.");
+    });
+
+    $("#openSavedZone").addEventListener("click", () => {
+      const saved = getSavedZone();
+      if (saved) openZone(saved.zoneId, saved.centerName);
+    });
+
+    const saved = getSavedZone();
+    if (saved) {
+      zoneSelect.value = saved.zoneId;
+      zoneSelect.dispatchEvent(new Event("change"));
+      centerSelect.value = saved.centerName;
+      renderSavedZone(saved);
+    }
+  }
+
+  function getSavedZone() {
+    try {
+      const saved = JSON.parse(localStorage.getItem("jimmyIsidroMyZone"));
+      if (!saved?.zoneId || !saved?.centerName) return null;
+      return saved;
+    } catch {
+      return null;
+    }
+  }
+
+  function renderSavedZone(selection) {
+    const zone = data.zones.find(item => item.id === selection.zoneId);
+    const center = zone?.centers.find(item => item.name === selection.centerName);
+    if (!zone || !center) return;
+    $("#savedZoneName").textContent = center.name;
+    $("#savedZoneParent").textContent = zone.name;
+    savedZonePanel.hidden = false;
+  }
+
   async function shareApp(mode = "general") {
     const url = location.protocol.startsWith("http") ? location.href.split("#")[0] : config.facebookUrl;
     const messages = {
-      general: `Conoce la aplicación ciudadana de Jimmy Isidro para Independencia: centros poblados, propuestas y formas de participación. ${url}`,
-      chain: `Te invito a conocer la aplicación de Jimmy Isidro. Encuentra tu barrio o centro poblado y participa voluntariamente por Independencia. ${url}`
+      general: `Conoce la aplicación ciudadana de Jimmy Isidro para Independencia: territorios, propuestas y formas de participación. ${url}`,
+      chain: `Te invito a conocer la aplicación de Jimmy Isidro. Encuentra tu barrio o centro poblado y conoce las propuestas para Independencia. ${url}`
     };
     const text = messages[mode];
     if (navigator.share) {
       try { await navigator.share({title:"Jimmy Isidro | Independencia", text, url}); return; } catch (e) { if (e.name === "AbortError") return; }
     }
-    const wa = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(wa, "_blank", "noopener,noreferrer");
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
   }
 
   function setupInstall() {
     const installDialog = $("#installDialog");
-    const openButtons = [$("#installCard"), $("#installTop")];
-    openButtons.forEach(btn => btn?.addEventListener("click", () => installDialog.showModal()));
+    [$("#installCard"), $("#installTop")].forEach(btn => btn?.addEventListener("click", () => installDialog.showModal()));
     $("#nativeInstall").addEventListener("click", async () => {
       if (!deferredPrompt) { showToast("En iPhone usa Safari → Compartir → Agregar a inicio."); return; }
       deferredPrompt.prompt();
@@ -184,23 +237,22 @@
     const sections = links.map(a => document.getElementById(a.dataset.section)).filter(Boolean);
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          links.forEach(a => a.classList.toggle("active", a.dataset.section === entry.target.id));
-        }
+        if (entry.isIntersecting) links.forEach(a => a.classList.toggle("active", a.dataset.section === entry.target.id));
       });
-    }, {rootMargin:"-40% 0px -50% 0px", threshold:0});
+    }, {rootMargin:"-42% 0px -48% 0px", threshold:0});
     sections.forEach(section => observer.observe(section));
   }
 
+
   function setupEvents() {
-    zoneGrid.addEventListener("click", e => {
-      const card = e.target.closest("[data-zone]");
+    zoneGrid.addEventListener("click", event => {
+      const card = event.target.closest("[data-zone]");
       if (card) openZone(card.dataset.zone);
     });
     $("#closeTerritory").addEventListener("click", () => closeDialog(dialog));
-    dialog.addEventListener("click", e => { if (e.target === dialog) closeDialog(dialog); });
+    dialog.addEventListener("click", event => { if (event.target === dialog) closeDialog(dialog); });
     $$(".close-generic").forEach(btn => btn.addEventListener("click", () => closeDialog(btn.closest("dialog"))));
-    $$("dialog").forEach(dlg => dlg.addEventListener("click", e => { if (e.target === dlg) closeDialog(dlg); }));
+    $$("dialog").forEach(dlg => dlg.addEventListener("click", event => { if (event.target === dlg) closeDialog(dlg); }));
     $("#privacyButton").addEventListener("click", () => $("#privacyDialog").showModal());
     $("#shareHero").addEventListener("click", () => shareApp("general"));
     $("#shareFinal").addEventListener("click", () => shareApp("general"));
@@ -208,9 +260,7 @@
   }
 
   function registerServiceWorker() {
-    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-      navigator.serviceWorker.register("sw.js").catch(() => {});
-    }
+    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(() => {});
   }
 
   renderZones();
@@ -218,6 +268,7 @@
   bindForms();
   bindExternalLinks();
   setupSearch();
+  populateZoneSelectors();
   setupInstall();
   setupNavigation();
   setupEvents();

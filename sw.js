@@ -1,9 +1,7 @@
-const CACHE = "jimmy-isidro-v2.0.0";
+const CACHE = "jimmy-isidro-v3.0.0";
 const APP_SHELL = [
   "./", "./index.html", "./styles.css", "./app.js", "./config.js", "./data.js", "./manifest.webmanifest",
-  "./assets/images/logo.webp", "./assets/images/jimmy-oficial.jpg", "./assets/images/jimmy-1.jpg",
-  "./assets/images/jimmy-2.jpg", "./assets/images/jimmy-3.jpg", "./assets/images/jimmy-4.jpg",
-  "./assets/images/jimmy-5.jpg", "./assets/images/jimmy-6.jpg",
+  "./assets/images/logo.webp", "./assets/images/jimmy-oficial.jpg", "./assets/images/jimmy-5.jpg",
   "./assets/icons/icon-192.png", "./assets/icons/icon-512.png", "./assets/icons/apple-touch-icon.png"
 ];
 self.addEventListener("install", event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting())));

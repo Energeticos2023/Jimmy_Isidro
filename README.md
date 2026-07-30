@@ -1,57 +1,43 @@
-# Jimmy Isidro App — PWA para Android y iPhone
+# Jimmy Isidro App — Versión 3.0 móvil
 
-Aplicación web progresiva lista para publicarse en GitHub Pages. Funciona como sitio web y puede instalarse en Android o agregarse a la pantalla de inicio de iPhone.
+Aplicación web progresiva (PWA) optimizada para Android y iPhone, preparada para publicarse en GitHub Pages.
 
-## Formularios integrados
+## Mejoras principales de esta versión
 
-Los enlaces se encuentran en `config.js` y fueron mapeados según el orden entregado:
+- Portada más limpia y menos saturada.
+- Un solo llamado principal: **Encuentra tu zona**.
+- Botones móviles de ancho completo y mayor separación.
+- Se eliminó el botón flotante que podía cubrir contenido.
+- Nueva función **Mi zona**, que guarda localmente el barrio o centro poblado elegido.
+- Navegación inferior actualizada: Inicio, Mi zona, Súmate, Propuestas y Jimmy.
+- Acceso directo al WhatsApp de Jimmy Isidro: 981 918 440.
+- Formularios de personeros, simpatizantes y profesionales.
+- Plan de Gobierno, diagnóstico territorial e investigación integral en una sección secundaria de transparencia.
+- Caché inicial más ligero: no descarga automáticamente toda la galería ni los PDF.
+- Diseño adaptado a pantallas pequeñas desde 360 px de ancho.
 
-1. Personeros
-2. Simpatizantes / voto seguro
-3. Profesionales y técnicos
+## Publicación en GitHub Pages
 
-Si el orden no coincide, solo intercambie los enlaces en `config.js`.
+1. Descomprime el ZIP.
+2. Sube todos los archivos y carpetas a la raíz del repositorio.
+3. En GitHub abre **Settings → Pages**.
+4. Selecciona **Deploy from a branch**.
+5. Elige la rama **main** y la carpeta **/ root**.
+6. Guarda los cambios.
 
-## Publicar en GitHub Pages
+## Actualización desde una versión anterior
 
-1. Cree un repositorio nuevo, por ejemplo: `Jimmy-Isidro-App`.
-2. Suba **el contenido de esta carpeta**, no la carpeta contenedora.
-3. En GitHub entre a `Settings` → `Pages`.
-4. En `Build and deployment`, seleccione `Deploy from a branch`.
-5. Elija la rama `main` y la carpeta `/ (root)`.
-6. Presione `Save` y espere la dirección pública.
+Reemplaza todos los archivos anteriores, especialmente:
 
-La URL tendrá una estructura similar a:
-`https://USUARIO.github.io/Jimmy-Isidro-App/`
+- `index.html`
+- `styles.css`
+- `app.js`
+- `sw.js`
+- `manifest.webmanifest`
+- carpeta `assets`
 
-## Instalar
-
-### Android
-Abra la URL en Chrome y presione `Instalar aplicación` o `Agregar a pantalla principal`.
-
-### iPhone
-Abra la URL en Safari → botón Compartir → `Agregar a inicio`.
-
-## Actualizar centros poblados y barrios
-
-Edite `data.js`. Cada territorio tiene:
-- `name`
-- `population`
-- `localities`
-- `needs`
-- `status`
-
-Cuando exista una población oficial, reemplace `population: null` por el número, por ejemplo:
-`population: "2 450"`
+El nuevo `sw.js` usa el caché `jimmy-isidro-v3.0.0`, por lo que los celulares deberían recibir la versión nueva. Si un equipo conserva la versión anterior, cerrar la app, abrirla de nuevo con internet y actualizar la página.
 
 ## Privacidad
 
-La aplicación no guarda respuestas ni datos personales. Los formularios se abren en Microsoft Forms. No agregue bases de datos públicas de simpatizantes, DNI, teléfonos o preferencias políticas dentro del repositorio.
-
-## Documentos públicos
-
-Se incluyeron:
-- Diagnóstico territorial inicial.
-- Investigación integral del distrito.
-
-El Plan Estratégico de Campaña no se incluye porque es un documento interno.
+La app no guarda respuestas de formularios. La selección de **Mi zona** se guarda únicamente en el navegador del propio celular mediante `localStorage`.
