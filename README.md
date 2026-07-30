@@ -1,3 +1,7 @@
+# Jimmy Isidro App — Versión 3.1
+
+Actualización principal: portada oficial con Jimmy Isidro mirando directamente a cámara, optimizada para celular y escritorio.
+
 # Jimmy Isidro App — Versión 3.0 móvil
 
 Aplicación web progresiva (PWA) optimizada para Android y iPhone, preparada para publicarse en GitHub Pages.
