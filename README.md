@@ -45,3 +45,7 @@ El nuevo `sw.js` usa el caché `jimmy-isidro-v3.0.0`, por lo que los celulares d
 ## Privacidad
 
 La app no guarda respuestas de formularios. La selección de **Mi zona** se guarda únicamente en el navegador del propio celular mediante `localStorage`.
+
+
+## Cambio V3.3
+La portada separa la fotografía y la identidad gráfica. El logo y los textos ya no se colocan sobre el rostro del candidato.

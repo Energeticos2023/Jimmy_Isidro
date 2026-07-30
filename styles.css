@@ -267,3 +267,123 @@ footer a { font-weight:800; }
   .hero-logo-watermark { width: 160px; top: 34px; left: 34px; }
   .hero-brand-card { max-width: 420px; }
 }
+
+
+/* V3.3 — portada limpia: la identidad no cubre el rostro */
+.hero-clean {
+  display: grid;
+  grid-template-rows: auto auto;
+  align-items: stretch;
+  min-height: 0;
+  padding: 0;
+  background: var(--black);
+}
+.hero-clean .hero-media {
+  position: relative;
+  min-height: 430px;
+  overflow: hidden;
+  background: #e7edf1;
+}
+.hero-clean .hero-picture,
+.hero-clean .hero-picture .hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.hero-clean .hero-picture .hero-image {
+  object-fit: cover;
+  object-position: center 22%;
+}
+.hero-clean .hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.02) 0%, rgba(0,0,0,.03) 65%, rgba(18,18,18,.22) 100%);
+}
+.hero-clean .hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: none;
+  padding: 22px 18px 24px;
+  background: linear-gradient(150deg, #171717 0%, #0f0f0f 100%);
+}
+.hero-clean .hero-brand-card {
+  display: grid;
+  grid-template-columns: 66px 1fr;
+  align-items: center;
+  gap: 14px;
+  max-width: none;
+  margin: 0 0 18px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.hero-clean .hero-brand-card img {
+  width: 66px;
+  height: 66px;
+  border-radius: 19px;
+  object-fit: cover;
+  box-shadow: 0 12px 26px rgba(245,196,0,.20);
+}
+.hero-clean .hero-brand-card .eyebrow {
+  margin: 0 0 6px;
+  color: #ffe990;
+  background: rgba(245,196,0,.12);
+  border-color: rgba(245,196,0,.30);
+}
+.hero-clean .hero-brand-card strong {
+  display: block;
+  color: #fff;
+  font-size: .92rem;
+  line-height: 1.25;
+}
+.hero-clean .hero-content h1 {
+  margin: 0 0 10px;
+  font-size: clamp(2.3rem, 11vw, 3.55rem);
+}
+.hero-clean .hero-tagline {
+  margin-bottom: 12px;
+}
+.hero-clean .hero-copy {
+  max-width: 32ch;
+  font-size: 1rem;
+}
+.hero-clean .hero-actions {
+  margin-top: 20px;
+}
+.hero-logo-watermark { display: none !important; }
+
+@media (max-width: 480px) {
+  .hero-clean { padding: 0; }
+  .hero-clean .hero-media { min-height: 390px; }
+  .hero-clean .hero-picture .hero-image { object-position: center 20%; }
+  .hero-clean .hero-content { padding: 20px 16px 22px; }
+  .hero-clean .hero-brand-card { grid-template-columns: 58px 1fr; gap: 12px; margin-bottom: 16px; }
+  .hero-clean .hero-brand-card img { width: 58px; height: 58px; border-radius: 17px; }
+  .hero-clean .hero-brand-card strong { font-size: .84rem; }
+  .hero-clean .hero-content h1 { font-size: clamp(2.25rem, 12vw, 3rem); }
+}
+
+@media (min-width: 720px) {
+  .hero-clean {
+    grid-template-columns: minmax(330px, .82fr) minmax(420px, 1.18fr);
+    grid-template-rows: minmax(620px, 74vh);
+  }
+  .hero-clean .hero-media { grid-column: 2; grid-row: 1; min-height: 620px; }
+  .hero-clean .hero-content {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 42px 38px;
+  }
+  .hero-clean .hero-picture .hero-image { object-position: center 24%; }
+  .hero-clean .hero-overlay {
+    background: linear-gradient(90deg, rgba(18,18,18,.28) 0%, rgba(18,18,18,.05) 35%, rgba(18,18,18,0) 70%);
+  }
+  .hero-clean .hero-actions { grid-template-columns: 1fr; }
+  .hero-clean .hero-content h1 { font-size: clamp(3rem, 5vw, 4.4rem); }
+}
