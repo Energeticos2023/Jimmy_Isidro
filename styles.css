@@ -254,3 +254,16 @@ footer a { font-weight:800; }
   .hero-overlay { background:linear-gradient(90deg, rgba(10,10,10,.84) 0%, rgba(10,10,10,.58) 40%, rgba(10,10,10,.12) 72%, rgba(10,10,10,.08) 100%), linear-gradient(180deg, rgba(0,0,0,.04) 0%, rgba(0,0,0,.14) 55%, rgba(14,14,14,.64) 100%); }
   .hero-content { max-width:520px; }
 }
+
+@media (max-width: 480px) {
+  .hero { padding-top: 144px; }
+  .hero-logo-watermark { width: 86px; top: 24px; left: 20px; border-radius: 24px; }
+  .hero-logo-watermark img { border-radius: 22px; }
+  .hero-brand-card { gap: 12px; padding: 9px 11px; border-radius: 20px; margin-bottom: 14px; }
+  .hero-brand-card img { width: 54px; height: 54px; border-radius: 16px; }
+  .hero-brand-card strong { font-size: .84rem; }
+}
+@media (min-width: 720px) {
+  .hero-logo-watermark { width: 160px; top: 34px; left: 34px; }
+  .hero-brand-card { max-width: 420px; }
+}
