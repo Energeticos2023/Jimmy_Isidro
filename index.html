@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7c600" />
+  <meta name="description" content="Aplicación ciudadana de Jimmy Isidro para conocer Independencia, sus centros poblados, propuestas y formas de participación voluntaria." />
+  <meta property="og:title" content="Jimmy Isidro | Independencia" />
+  <meta property="og:description" content="Conoce tu territorio, participa y suma a Independencia." />
+  <meta property="og:image" content="assets/images/jimmy-oficial.jpg" />
+  <title>Jimmy Isidro | Independencia</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+  <link rel="icon" href="assets/icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="Ir al inicio">
+      <img src="assets/images/logo.webp" alt="Símbolo oficial de País para Todos" />
+      <span><strong>JIMMY ISIDRO</strong><small>Independencia</small></span>
+    </a>
+    <button id="installTop" class="install-mini" type="button" hidden>Instalar</button>
+  </header>
+
+  <main id="contenido">
+    <section id="inicio" class="hero section-anchor">
+      <img class="hero-image" src="assets/images/jimmy-oficial.jpg" alt="Jimmy Isidro" />
+      <div class="hero-shade"></div>
+      <div class="hero-content">
+        <span class="eyebrow">Herramienta ciudadana</span>
+        <h1>Jimmy Isidro</h1>
+        <p>Independencia escucha, planifica y cumple.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#participa">Súmate ahora</a>
+          <button class="btn btn-ghost" id="shareHero" type="button">Compartir app</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-stats" aria-label="Datos clave">
+      <article><strong>16</strong><span>centros poblados</span></article>
+      <article><strong>7</strong><span>Cordillera Blanca</span></article>
+      <article><strong>9</strong><span>Cordillera Negra</span></article>
+    </section>
+
+    <section class="section welcome">
+      <div class="section-heading">
+        <span class="kicker">Tu distrito, en una sola app</span>
+        <h2>Encuentra tu barrio, caserío o centro poblado</h2>
+        <p>Conoce las localidades vinculadas y las necesidades preliminares de cada territorio. Los datos poblacionales por localidad se actualizarán con fuentes oficiales.</p>
+      </div>
+      <label class="search-box">
+        <span aria-hidden="true">🔎</span>
+        <input id="territorySearch" type="search" placeholder="Busca Llupa, Chontayoc, Palmira..." autocomplete="off" />
+      </label>
+      <div id="searchResults" class="search-results" hidden></div>
+    </section>
+
+    <section id="territorio" class="section section-anchor">
+      <div class="section-heading">
+        <span class="kicker">Conoce Independencia</span>
+        <h2>Elige tu zona</h2>
+      </div>
+      <div id="zoneGrid" class="zone-grid"></div>
+      <div class="data-note">
+        <strong>Transparencia de datos:</strong> el inventario de caseríos, anexos, barrios y sectores es una base preliminar y será actualizado conforme se validen ordenanzas, padrones y fichas de campo.
+      </div>
+    </section>
+
+    <section id="participa" class="section section-dark section-anchor">
+      <div class="section-heading light">
+        <span class="kicker">La cadena ciudadana</span>
+        <h2>Elige cómo deseas participar</h2>
+        <p>Los registros son voluntarios. La aplicación no almacena tus respuestas; cada botón abre un formulario oficial de Microsoft Forms.</p>
+      </div>
+      <div class="participation-grid">
+        <article class="participation-card personeros">
+          <div class="participation-icon">🗳️</div>
+          <h3>Defiende el voto</h3>
+          <p>Postula como personero o personera y recibe capacitación para cuidar cada acta.</p>
+          <a id="formPersoneros" class="btn btn-primary btn-full" target="_blank" rel="noopener noreferrer">Quiero ser personero</a>
+        </article>
+        <article class="participation-card simpatizantes">
+          <div class="participation-icon">🤝</div>
+          <h3>Voto seguro</h3>
+          <p>Registra voluntariamente tu apoyo, recibe información y participa en la red territorial.</p>
+          <a id="formSimpatizantes" class="btn btn-primary btn-full" target="_blank" rel="noopener noreferrer">Registrar mi apoyo</a>
+        </article>
+        <article class="participation-card profesionales">
+          <div class="participation-icon">🧠</div>
+          <h3>Profesionales y técnicos</h3>
+          <p>Suma tu experiencia a los equipos de propuestas, datos, territorio y defensa del voto.</p>
+          <a id="formProfesionales" class="btn btn-primary btn-full" target="_blank" rel="noopener noreferrer">Sumar mi experiencia</a>
+        </article>
+      </div>
+      <div class="chain-card">
+        <div>
+          <span class="kicker">Reto 3 × 3</span>
+          <h3>Invita a tres vecinos a conocer la app</h3>
+          <p>Una cadena crece cuando cada persona comparte información clara y conversa con respeto.</p>
+        </div>
+        <button id="shareChain" class="btn btn-light" type="button">Invitar por WhatsApp</button>
+      </div>
+    </section>
+
+    <section id="propuestas" class="section section-anchor">
+      <div class="section-heading">
+        <span class="kicker">Cinco compromisos</span>
+        <h2>Una propuesta que se pueda verificar</h2>
+      </div>
+      <div id="commitmentGrid" class="commitment-grid"></div>
+    </section>
+
+    <section class="section jimmy-story">
+      <div class="story-image-wrap">
+        <img src="assets/images/jimmy-1.jpg" alt="Jimmy Isidro dialogando con vecinos" loading="lazy" />
+      </div>
+      <div class="story-copy">
+        <span class="kicker">Jimmy escucha</span>
+        <h2>Primero conocer. Luego comprometerse.</h2>
+        <p>La aplicación organiza la información por territorio para que cada vecino pueda reconocer su comunidad, expresar sus necesidades y seguir los compromisos.</p>
+        <a class="text-link" href="https://www.facebook.com/Jimmyisidrovillanueva1" target="_blank" rel="noopener noreferrer">Visitar Facebook oficial →</a>
+      </div>
+    </section>
+
+    <section class="section gallery-section">
+      <div class="section-heading">
+        <span class="kicker">En el territorio</span>
+        <h2>Escuchar cara a cara</h2>
+      </div>
+      <div class="gallery" aria-label="Galería de actividades">
+        <img src="assets/images/jimmy-2.jpg" alt="Reunión del equipo de Jimmy Isidro" loading="lazy" />
+        <img src="assets/images/jimmy-3.jpg" alt="Jimmy Isidro dialogando en una asamblea" loading="lazy" />
+        <img src="assets/images/jimmy-4.jpg" alt="Reunión ciudadana con Jimmy Isidro" loading="lazy" />
+        <img src="assets/images/jimmy-5.jpg" alt="Jimmy Isidro en una actividad territorial" loading="lazy" />
+      </div>
+    </section>
+
+    <section id="mas" class="section documents section-anchor">
+      <div class="section-heading">
+        <span class="kicker">Información abierta</span>
+        <h2>Documentos para conocer el distrito</h2>
+      </div>
+      <div class="document-grid">
+        <a class="document-card" href="assets/docs/diagnostico-territorial-independencia.pdf" target="_blank" rel="noopener">
+          <span>📄</span><div><strong>Diagnóstico territorial</strong><small>Centros poblados, salud, educación, agua y economía</small></div>
+        </a>
+        <a class="document-card" href="assets/docs/investigacion-integral-independencia.pdf" target="_blank" rel="noopener">
+          <span>📚</span><div><strong>Investigación integral</strong><small>Problemática, actividades económicas y prioridades</small></div>
+        </a>
+        <button class="document-card" id="installCard" type="button">
+          <span>📲</span><div><strong>Instalar en el celular</strong><small>Android y iPhone: acceso directo como aplicación</small></div>
+        </button>
+        <button class="document-card" id="privacyButton" type="button">
+          <span>🔒</span><div><strong>Privacidad y participación</strong><small>Cómo se protegen los datos y qué no almacena la app</small></div>
+        </button>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <img src="assets/images/logo.webp" alt="País para Todos" />
+      <div>
+        <h2>Juntos por Independencia</h2>
+        <p>Rostro, nombre, territorio y compromiso.</p>
+      </div>
+      <button id="shareFinal" class="btn btn-dark" type="button">Compartir</button>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Jimmy Isidro</strong>
+    <span>País para Todos · Independencia, Huaraz</span>
+    <a href="https://www.facebook.com/Jimmyisidrovillanueva1" target="_blank" rel="noopener noreferrer">Facebook oficial</a>
+    <small>Aplicación informativa y de participación voluntaria. Versión 1.0.</small>
+  </footer>
+
+  <nav class="bottom-nav" aria-label="Navegación principal">
+    <a href="#inicio" data-section="inicio"><span>⌂</span>Inicio</a>
+    <a href="#territorio" data-section="territorio"><span>⌖</span>Territorio</a>
+    <a href="#participa" data-section="participa" class="nav-main"><span>＋</span>Participa</a>
+    <a href="#propuestas" data-section="propuestas"><span>✓</span>Propuestas</a>
+    <a href="#mas" data-section="mas"><span>•••</span>Más</a>
+  </nav>
+
+  <dialog id="territoryDialog" class="modal">
+    <div class="modal-head">
+      <div><span id="modalZone" class="kicker"></span><h2 id="modalTitle"></h2></div>
+      <button id="closeTerritory" class="icon-button" aria-label="Cerrar">×</button>
+    </div>
+    <div id="modalContent" class="modal-content"></div>
+  </dialog>
+
+  <dialog id="installDialog" class="modal compact-modal">
+    <div class="modal-head">
+      <div><span class="kicker">Instalación</span><h2>Guarda la app en tu celular</h2></div>
+      <button class="icon-button close-generic" aria-label="Cerrar">×</button>
+    </div>
+    <div class="modal-content install-steps">
+      <h3>Android · Chrome</h3>
+      <p>Presiona <strong>Instalar aplicación</strong> o abre el menú ⋮ y elige <strong>Agregar a la pantalla principal</strong>.</p>
+      <button id="nativeInstall" class="btn btn-primary btn-full" type="button">Instalar aplicación</button>
+      <h3>iPhone · Safari</h3>
+      <p>Presiona <strong>Compartir</strong> ⎋ y selecciona <strong>Agregar a inicio</strong>.</p>
+    </div>
+  </dialog>
+
+  <dialog id="privacyDialog" class="modal compact-modal">
+    <div class="modal-head">
+      <div><span class="kicker">Privacidad</span><h2>Participación voluntaria</h2></div>
+      <button class="icon-button close-generic" aria-label="Cerrar">×</button>
+    </div>
+    <div class="modal-content">
+      <p>Esta aplicación no guarda nombres, teléfonos, preferencias políticas ni respuestas. Los botones de registro abren formularios externos de Microsoft Forms.</p>
+      <p>La inscripción no obliga el sentido del voto ni condiciona beneficios. Evita compartir DNI, datos bancarios o fotografías de tu voto dentro de canales públicos.</p>
+      <p>Para consultar, corregir o retirar datos enviados, comunícate con el equipo mediante la página oficial de Facebook.</p>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
