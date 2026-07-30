@@ -6,8 +6,8 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#141414",
-  "theme_color": "#f7c600",
+  "background_color": "#fff9e8",
+  "theme_color": "#f5c400",
   "lang": "es-PE",
   "categories": ["social", "news", "education"],
   "icons": [

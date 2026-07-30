@@ -24,6 +24,10 @@
     showToast.timer = setTimeout(() => toast.classList.remove("show"), 2600);
   }
 
+  function buildWhatsAppUrl(text = config.whatsappText) {
+    return `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(text)}`;
+  }
+
   function renderZones() {
     zoneGrid.innerHTML = data.zones.map(zone => `
       <button class="zone-card" type="button" data-zone="${escapeHtml(zone.id)}">
@@ -93,7 +97,22 @@
   function bindForms() {
     $("#formPersoneros").href = config.forms.personeros;
     $("#formSimpatizantes").href = config.forms.simpatizantes;
+    $("#formVoteSecureQuick").href = config.forms.simpatizantes;
     $("#formProfesionales").href = config.forms.profesionales;
+  }
+
+  function bindExternalLinks() {
+    const waLinks = ["#whatsHero", "#whatsQuick", "#whatsStory", "#whatsDocs", "#whatsBand", "#whatsappFloat"];
+    waLinks.forEach(sel => {
+      const el = $(sel);
+      if (!el) return;
+      el.href = buildWhatsAppUrl();
+    });
+
+    ["#facebookQuick", "#facebookStory", "#facebookDocs", "#facebookFooter"].forEach(sel => {
+      const el = $(sel);
+      if (el) el.href = config.facebookUrl;
+    });
   }
 
   const allTerritories = data.zones.flatMap(zone => zone.centers.map(center => ({zone, center})));
@@ -169,7 +188,7 @@
           links.forEach(a => a.classList.toggle("active", a.dataset.section === entry.target.id));
         }
       });
-    }, {rootMargin:"-38% 0px -55% 0px", threshold:0});
+    }, {rootMargin:"-40% 0px -50% 0px", threshold:0});
     sections.forEach(section => observer.observe(section));
   }
 
@@ -197,6 +216,7 @@
   renderZones();
   renderCommitments();
   bindForms();
+  bindExternalLinks();
   setupSearch();
   setupInstall();
   setupNavigation();
