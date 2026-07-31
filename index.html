@@ -1,315 +1,398 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-PE">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f5c400" />
-  <meta name="description" content="Aplicación ciudadana de Jimmy Isidro para conocer Independencia, sus territorios, propuestas y formas de participación voluntaria." />
-  <meta property="og:title" content="Jimmy Isidro | Independencia" />
-  <meta property="og:description" content="Encuentra tu barrio, caserío o centro poblado. Conoce las propuestas y participa." />
-  <meta property="og:image" content="assets/images/jimmy-portada-frontal.jpg" />
-  <title>Jimmy Isidro | Independencia</title>
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
-  <link rel="icon" href="assets/icons/icon-192.png" />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0D141C" />
+<meta name="description" content="Aplicación ciudadana de Jimmy Isidro: encuentra tu caserío, barrio o centro poblado de Independencia, conoce las propuestas y participa." />
+<meta property="og:title" content="Jimmy Isidro | Independencia" />
+<meta property="og:description" content="Encuentra tu caserío, barrio o centro poblado. Conoce las propuestas y participa." />
+<meta property="og:image" content="assets/images/jimmy-portada-frontal.jpg" />
+<title>Jimmy Isidro | Independencia</title>
+
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+<link rel="icon" href="assets/icons/icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Jimmy Isidro" />
+
+<link rel="preload" href="assets/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" as="image" href="assets/images/jimmy-portada-frontal.webp" />
+<link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+<body data-nivel="raiz">
 
-  <header class="topbar">
-    <a class="brand" href="#inicio" aria-label="Ir al inicio">
-      <img src="assets/images/logo.webp" alt="Logo oficial de País para Todos" />
-      <span><strong>JIMMY ISIDRO</strong><small>Alcalde de Independencia</small></span>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<!-- ============================ ICONOS ============================ -->
+<svg class="sprite" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.6 12 4l8 6.6"/><path d="M6.3 9.6V20h11.4V9.6"/><path d="M10 20v-5h4v5"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.8 9.5 18 19.5 6.5"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="3.6"/><path d="M5.2 20c0-3.8 3-6 6.8-6s6.8 2.2 6.8 6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M15.8 15.8 20.5 20.5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-11.1A7 7 0 0 0 5 9.9C5 14.7 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.5"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3.5 6.4v13.2L9 17.2l6 2.4 5.5-2.4V4L15 6.4z"/><path d="M9 4v13.2M15 6.4V19.6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M9.5 5.5 16 12l-6.5 6.5"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M14.5 5.5 8 12l6.5 6.5"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15.5V3.5"/><path d="M8 7.5 12 3.5l4 4"/><path d="M5.5 13.5v6a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-6"/></symbol>
+  <symbol id="i-install" viewBox="0 0 24 24"><path d="M12 3.5v11"/><path d="M8 10.5 12 14.5l4-4"/><path d="M5.5 18.5h13"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9.5" rx="2.2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6.5 3.5h7l4.5 4.5v12.5h-11.5z"/><path d="M13.5 3.5V8H18"/><path d="M9 13h6M9 16.5h4"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4.5 5.5A2.5 2.5 0 0 1 7 3h12.5v15.5H7a2.5 2.5 0 0 0-2.5 2.5z"/><path d="M8 7.5h7"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20.5 11.6a8.2 8.2 0 0 1-12 7.3L3.5 20.5l1.7-4.8a8.2 8.2 0 1 1 15.3-4.1z"/></symbol>
+  <symbol id="i-megaphone" viewBox="0 0 24 24"><path d="M4 10v4a1.5 1.5 0 0 0 1.5 1.5H8l7 4.5V4L8 8.5H5.5A1.5 1.5 0 0 0 4 10z"/><path d="M18 9.2a4 4 0 0 1 0 5.6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.2 19 6v6.1c0 4.4-3 7.6-7 8.7-4-1.1-7-4.3-7-8.7V6z"/><path d="M9 12.2l2.2 2.2L15.2 10"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.1"/><path d="M3.5 19.5c0-3.2 2.5-5.1 5.5-5.1s5.5 1.9 5.5 5.1"/><path d="M16.2 6.6a2.9 2.9 0 0 1 0 5.4"/><path d="M17.5 14.8c1.9.5 3 2.2 3 4.7"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.4s6.2 6.5 6.2 10.4a6.2 6.2 0 0 1-12.4 0C5.8 9.9 12 3.4 12 3.4z"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 19.5h16"/><path d="M7.5 16.5v-4.8M12 16.5V6.5M16.5 16.5v-7"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.4S3.8 15.2 3.8 9.7A4.4 4.4 0 0 1 12 7.2a4.4 4.4 0 0 1 8.2 2.5c0 5.5-8.2 10.7-8.2 10.7z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 11v5.2M12 7.8v.2"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6.5 6.5 17.5 17.5M17.5 6.5 6.5 17.5"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M6 21V4"/><path d="M6 4.5h11l-2.2 4 2.2 4H6"/></symbol>
+</defs></svg>
+
+<!-- ========================= BARRA SUPERIOR ========================= -->
+<header class="appbar">
+  <div class="appbar-in">
+    <button class="appbar-back" id="btnBack" type="button" aria-label="Volver"><svg class="ic"><use href="#i-left"/></svg></button>
+    <a class="appbar-brand" href="#/inicio">
+      <img src="assets/images/logo.webp" alt="País para Todos" />
+      <b>Jimmy Isidro</b>
     </a>
-    <button id="installTop" class="install-mini" type="button" hidden>Instalar</button>
-  </header>
+    <h2 class="appbar-title" id="barTitle">Territorio</h2>
+    <button class="appbar-cta" id="btnInstallTop" type="button" hidden>
+      <svg class="ic ic-sm"><use href="#i-install"/></svg>Instalar
+    </button>
+  </div>
+</header>
 
-  <main id="contenido">
-    <section id="inicio" class="hero hero-clean section-anchor">
-      <div class="hero-media">
-        <picture class="hero-picture">
-          <source media="(min-width: 720px)" srcset="assets/images/jimmy-portada-frontal-desktop.webp" />
-          <img class="hero-image" src="assets/images/jimmy-portada-frontal.webp" alt="Jimmy Isidro mirando de frente a la ciudadanía" />
-        </picture>
-        <div class="hero-overlay"></div>
+<main id="main">
+
+  <!-- ============================= INICIO ============================= -->
+  <section class="screen on" id="s-inicio">
+
+    <div class="hero">
+      <div class="hero-photo">
+        <img src="assets/images/jimmy-portada-frontal.webp" alt="Jimmy Isidro, candidato a la alcaldía de Independencia" fetchpriority="high" />
       </div>
-      <div class="hero-content">
-        <div class="hero-brand-card">
-          <img src="assets/images/logo.webp" alt="Logo oficial de País para Todos" />
-          <div>
-            <span class="eyebrow">País para Todos</span>
-            <strong>Herramienta ciudadana oficial</strong>
-          </div>
-        </div>
+      <div class="hero-body">
+        <div class="hero-rule"><span>País para Todos</span><i></i></div>
         <h1>Jimmy Isidro</h1>
-        <p class="hero-tagline">Experiencia que construye.<br />Juventud que transforma.</p>
-        <p class="hero-copy">Conoce tu barrio, caserío o centro poblado y descubre las propuestas para Independencia.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary btn-large" href="#mi-zona">📍 Encuentra tu zona</a>
-          <a id="whatsHero" class="btn btn-ghost btn-large" target="_blank" rel="noopener noreferrer">💬 Habla con Jimmy</a>
-        </div>
+        <span class="hero-role"><svg class="ic ic-sm"><use href="#i-flag"/></svg>Alcalde de Independencia</span>
+        <p class="hero-tag"><b>Experiencia que construye.</b><br />Juventud que transforma.</p>
       </div>
-    </section>
+      <svg class="contour" viewBox="0 0 400 46" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,20 C46,12 68,26 104,18 C142,10 158,-2 200,4 C244,10 264,26 302,20 C340,14 368,24 400,17" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1.2"/>
+        <path d="M0,31 C46,23 68,37 104,29 C142,21 158,9 200,15 C244,21 264,37 302,31 C340,25 368,35 400,28" fill="none" stroke="rgba(245,196,0,.28)" stroke-width="1.2"/>
+        <path d="M0,46 L0,40 C46,32 68,46 104,38 C142,30 158,18 200,24 C244,30 264,46 302,40 C340,34 368,44 400,37 L400,46 Z" fill="#ECEFF2"/>
+      </svg>
+    </div>
 
-    <section class="candidate-strip" aria-label="Información del candidato">
-      <img src="assets/images/jimmy-portada-frontal.webp" alt="Foto oficial de Jimmy Isidro mirando de frente" />
-      <div class="candidate-strip-copy">
-        <strong>Jimmy Isidro</strong>
-        <span>Alcalde de Independencia</span>
-        <small>WhatsApp directo: 981 918 440</small>
+    <div class="hero-cta stack">
+      <a class="btn btn-gold" href="#/territorio"><svg class="ic"><use href="#i-map"/></svg>Encuentra tu zona</a>
+      <a class="btn btn-line" id="waHero" target="_blank" rel="noopener noreferrer"><svg class="ic"><use href="#i-chat"/></svg>Escribir por WhatsApp</a>
+    </div>
+
+    <div class="block" id="savedBlock" hidden>
+      <div class="block-head"><span class="eyebrow">Tu zona guardada</span></div>
+      <button class="row" id="rowSaved" type="button">
+        <span class="row-ic gold"><svg class="ic"><use href="#i-bookmark"/></svg></span>
+        <span class="row-tx"><strong id="savedName">—</strong><small id="savedParent">—</small></span>
+        <span class="row-go"><svg class="ic ic-sm"><use href="#i-right"/></svg></span>
+      </button>
+    </div>
+
+    <div class="block">
+      <div class="block-head">
+        <span class="eyebrow">Qué puedes hacer aquí</span>
+        <h2>Tres pasos, uno a la vez</h2>
       </div>
-      <button id="shareHero" class="round-action" type="button" aria-label="Compartir aplicación">↗</button>
-    </section>
-
-    <section class="quick-actions" aria-label="Accesos rápidos">
-      <a id="whatsQuick" class="quick-action quick-action-highlight" target="_blank" rel="noopener noreferrer">
-        <span class="quick-action-icon">💬</span>
-        <div><strong>Habla con Jimmy</strong><small>Contacto directo por WhatsApp</small></div>
-        <b>›</b>
-      </a>
-      <a href="#mi-zona" class="quick-action">
-        <span class="quick-action-icon">📍</span>
-        <div><strong>Mi zona</strong><small>Encuentra tu barrio o centro poblado</small></div>
-        <b>›</b>
-      </a>
-      <a id="formVoteSecureQuick" class="quick-action" target="_blank" rel="noopener noreferrer">
-        <span class="quick-action-icon">🤝</span>
-        <div><strong>Me sumo a Jimmy</strong><small>Registro voluntario de apoyo</small></div>
-        <b>›</b>
-      </a>
-      <a id="facebookQuick" class="quick-action" target="_blank" rel="noopener noreferrer">
-        <span class="quick-action-icon">📘</span>
-        <div><strong>Facebook oficial</strong><small>Noticias y actividades de campaña</small></div>
-        <b>›</b>
-      </a>
-    </section>
-
-    <section class="quick-stats" aria-label="Datos clave">
-      <article><strong>16</strong><span>centros poblados</span></article>
-      <article><strong>7</strong><span>Cordillera Blanca</span></article>
-      <article><strong>9</strong><span>Cordillera Negra</span></article>
-    </section>
-
-    <section id="mi-zona" class="section section-anchor">
-      <div class="section-heading">
-        <span class="kicker">Haz tuya la aplicación</span>
-        <h2>Configura tu zona</h2>
-        <p>Selecciona tu territorio. La elección se guarda únicamente en este celular y no se envía a ningún servidor.</p>
+      <div class="stack">
+        <a class="row" href="#/territorio">
+          <span class="row-ic"><svg class="ic"><use href="#i-map"/></svg></span>
+          <span class="row-tx"><strong>Mi territorio</strong><small>Encuentra tu caserío, barrio o centro poblado</small></span>
+          <span class="row-go"><svg class="ic ic-sm"><use href="#i-right"/></svg></span>
+        </a>
+        <a class="row" href="#/propuestas">
+          <span class="row-ic"><svg class="ic"><use href="#i-check"/></svg></span>
+          <span class="row-tx"><strong>Las propuestas</strong><small>Cinco compromisos claros y verificables</small></span>
+          <span class="row-go"><svg class="ic ic-sm"><use href="#i-right"/></svg></span>
+        </a>
+        <a class="row" href="#/sumate">
+          <span class="row-ic gold"><svg class="ic"><use href="#i-users"/></svg></span>
+          <span class="row-tx"><strong>Participar</strong><small>Personeros, apoyo ciudadano y profesionales</small></span>
+          <span class="row-go"><svg class="ic ic-sm"><use href="#i-right"/></svg></span>
+        </a>
       </div>
+    </div>
 
-      <div class="zone-personalizer">
-        <label>
-          <span>1. Elige la zona</span>
-          <select id="zoneSelect" aria-label="Elegir zona">
-            <option value="">Seleccionar zona</option>
-          </select>
-        </label>
-        <label>
-          <span>2. Elige tu territorio</span>
-          <select id="centerSelect" aria-label="Elegir territorio" disabled>
-            <option value="">Seleccionar territorio</option>
-          </select>
-        </label>
-        <button id="saveZone" class="btn btn-dark btn-full" type="button">Guardar mi zona</button>
+    <div class="block">
+      <div class="card card-ink">
+        <svg class="card-art" viewBox="0 0 200 200" aria-hidden="true">
+          <g fill="none" stroke="#F5C400" stroke-width="1.4">
+            <circle cx="100" cy="100" r="30"/><circle cx="100" cy="100" r="48"/>
+            <circle cx="100" cy="100" r="66"/><circle cx="100" cy="100" r="84"/>
+          </g>
+        </svg>
+        <span class="eyebrow">Comparte</span>
+        <h3>Invita a tres vecinos</h3>
+        <p class="lead">Que cada persona que conozca la aplicación la comparta con tres más de su calle o su caserío.</p>
+        <button class="btn btn-gold" id="btnShareHome" type="button"><svg class="ic"><use href="#i-share"/></svg>Compartir la aplicación</button>
       </div>
+    </div>
+  </section>
 
-      <div id="savedZonePanel" class="saved-zone" hidden>
-        <div>
-          <span class="kicker">Tu zona guardada</span>
-          <h3 id="savedZoneName"></h3>
-          <p id="savedZoneParent"></p>
-        </div>
-        <button id="openSavedZone" class="btn btn-primary" type="button">Ver ficha</button>
+  <!-- =========================== TERRITORIO =========================== -->
+  <section class="screen" id="s-territorio">
+    <div class="block">
+      <div class="block-head">
+        <span class="eyebrow">Distrito de Independencia</span>
+        <h2>Encuentra tu zona</h2>
+        <p class="lead">Escribe el nombre de tu caserío o barrio, o elige una de las tres zonas del distrito.</p>
       </div>
-
-      <div class="section-heading search-heading">
-        <span class="kicker">Búsqueda rápida</span>
-        <h2>Encuentra tu barrio, caserío o centro poblado</h2>
-      </div>
-      <label class="search-box">
-        <span aria-hidden="true">🔎</span>
-        <input id="territorySearch" type="search" placeholder="Ejemplo: Llupa, Palmira, Chontayoc..." autocomplete="off" />
+      <label class="search">
+        <svg class="ic"><use href="#i-search"/></svg>
+        <input id="q" type="search" placeholder="Llupa, Palmira, Chontayoc…" autocomplete="off" aria-label="Buscar territorio" />
       </label>
-      <div id="searchResults" class="search-results" hidden></div>
-    </section>
+      <div class="results stack" id="results"></div>
+    </div>
 
-    <section id="territorio" class="section section-anchor">
-      <div class="section-heading">
-        <span class="kicker">Conoce Independencia</span>
-        <h2>Explora el territorio</h2>
-        <p>Revisa localidades vinculadas y necesidades preliminares por cada zona.</p>
-      </div>
-      <div id="zoneGrid" class="zone-grid"></div>
-      <div class="data-note">
-        <strong>Transparencia:</strong> las fichas territoriales se actualizarán conforme se validen ordenanzas, padrones oficiales y recorridos de campo.
-      </div>
-    </section>
+    <div class="block">
+      <div class="block-head"><span class="eyebrow">Las tres Independencias</span></div>
+      <div class="stack" id="zoneCards"></div>
+    </div>
 
-    <section id="participa" class="section section-dark section-anchor">
-      <div class="section-heading light">
-        <span class="kicker">La cadena ciudadana</span>
-        <h2>Elige cómo deseas participar</h2>
-        <p>Los registros son voluntarios y se realizan mediante formularios oficiales de Microsoft Forms.</p>
+    <div class="block">
+      <div class="note">
+        <svg class="ic ic-sm"><use href="#i-info"/></svg>
+        <span><strong>Información en validación.</strong> Las fichas se actualizan conforme se verifican ordenanzas, padrones oficiales y recorridos de campo. Si falta tu caserío o barrio, escríbenos por WhatsApp.</span>
       </div>
-      <div class="participation-grid">
-        <article class="participation-card">
-          <div class="participation-icon">🗳️</div>
-          <h3>Defiende el voto</h3>
-          <p>Postula como personero o personera y recibe capacitación para cuidar cada acta.</p>
-          <a id="formPersoneros" class="btn btn-primary btn-full" target="_blank" rel="noopener noreferrer">Quiero ser personero</a>
-        </article>
-        <article class="participation-card">
-          <div class="participation-icon">🤝</div>
+    </div>
+  </section>
+
+  <!-- ======================== LISTA DE UNA ZONA ======================== -->
+  <section class="screen" id="s-lista">
+    <div class="block">
+      <div class="block-head">
+        <span class="eyebrow">Zona del distrito</span>
+        <h2 id="listaTitulo">—</h2>
+        <p class="lead" id="listaDesc">—</p>
+      </div>
+      <div class="stack" id="listaItems"></div>
+    </div>
+  </section>
+
+  <!-- ========================= FICHA TERRITORIAL ========================= -->
+  <section class="screen" id="s-ficha">
+    <div class="ficha-hero" id="fichaHero">
+      <span class="eyebrow" id="fichaZona">—</span>
+      <h1 id="fichaNombre">—</h1>
+      <div class="chips"><span class="chip chip-state" id="fichaEstado">—</span></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="eyebrow">Localidades vinculadas</span></div>
+      <div class="chips" id="fichaLocs"></div>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="eyebrow">Prioridades identificadas</span></div>
+      <ul class="needs" id="fichaNeeds"></ul>
+    </div>
+
+    <div class="block">
+      <div class="stack">
+        <button class="btn btn-gold" id="btnGuardarZona" type="button"><svg class="ic"><use href="#i-bookmark"/></svg>Guardar como mi zona</button>
+        <a class="btn btn-ink" id="btnFichaSumar" target="_blank" rel="noopener noreferrer"><svg class="ic"><use href="#i-users"/></svg>Me sumo a Jimmy</a>
+        <button class="btn btn-line" id="btnFichaShare" type="button"><svg class="ic"><use href="#i-share"/></svg>Compartir esta ficha</button>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="note note-quiet">
+        <svg class="ic ic-sm"><use href="#i-info"/></svg>
+        <span id="fichaNota">—</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= SÚMATE ============================= -->
+  <section class="screen" id="s-sumate">
+    <div class="block">
+      <div class="block-head">
+        <span class="eyebrow">Participación voluntaria</span>
+        <h2>Elige cómo quieres sumarte</h2>
+        <p class="lead">Cada opción abre un formulario oficial. Toma dos minutos y funciona con datos móviles.</p>
+      </div>
+      <div class="stack-lg">
+        <div class="card">
+          <span class="eyebrow">Defiende el voto</span>
+          <h3>Personeros y personeras</h3>
+          <p class="lead">Cuida el acta de tu mesa el día de la elección. Recibes capacitación y acreditación ante el Jurado Electoral Especial.</p>
+          <a class="btn btn-gold" id="formPersoneros" target="_blank" rel="noopener noreferrer"><svg class="ic"><use href="#i-shield"/></svg>Quiero ser personero</a>
+        </div>
+
+        <div class="card">
+          <span class="eyebrow">Apoyo ciudadano</span>
           <h3>Me sumo a Jimmy</h3>
-          <p>Registra voluntariamente tu apoyo y recibe información de la campaña.</p>
-          <a id="formSimpatizantes" class="btn btn-primary btn-full" target="_blank" rel="noopener noreferrer">Registrar mi apoyo</a>
-        </article>
-        <article class="participation-card">
-          <div class="participation-icon">🧠</div>
+          <p class="lead">Registra voluntariamente tu respaldo y recibe información de la campaña en tu zona.</p>
+          <a class="btn btn-ink" id="formSimpatizantes" target="_blank" rel="noopener noreferrer"><svg class="ic"><use href="#i-users"/></svg>Registrar mi apoyo</a>
+        </div>
+
+        <div class="card">
+          <span class="eyebrow">Equipo técnico</span>
           <h3>Profesionales y técnicos</h3>
-          <p>Suma tu experiencia a los equipos de propuestas, territorio e innovación.</p>
-          <a id="formProfesionales" class="btn btn-primary btn-full" target="_blank" rel="noopener noreferrer">Sumar mi experiencia</a>
-        </article>
-      </div>
-      <div class="chain-card">
-        <div>
-          <span class="kicker">Reto 3 × 3</span>
-          <h3>Invita a tres vecinos</h3>
-          <p>Comparte la app con tres personas para que conozcan las propuestas y su territorio.</p>
-        </div>
-        <button id="shareChain" class="btn btn-light" type="button">Invitar por WhatsApp</button>
-      </div>
-    </section>
-
-    <section id="propuestas" class="section section-anchor">
-      <div class="section-heading">
-        <span class="kicker">Cinco compromisos</span>
-        <h2>Propuestas claras y verificables</h2>
-      </div>
-      <div id="commitmentGrid" class="commitment-grid"></div>
-    </section>
-
-    <section id="jimmy" class="section story-grid section-anchor">
-      <div class="story-image-wrap">
-        <img src="assets/images/jimmy-6.jpg" alt="Jimmy Isidro junto a ciudadanos y al símbolo de País para Todos" loading="lazy" />
-      </div>
-      <div class="story-copy">
-        <span class="kicker">Conoce a Jimmy</span>
-        <h2>Primero escuchar. Luego comprometerse.</h2>
-        <p>Esta aplicación organiza información territorial, propuestas y formas de participación para acercar la campaña a cada ciudadano de Independencia.</p>
-        <div class="story-links">
-          <a id="whatsStory" class="text-link" target="_blank" rel="noopener noreferrer">Escribir al WhatsApp directo →</a>
-          <a id="facebookStory" class="text-link" target="_blank" rel="noopener noreferrer">Visitar Facebook oficial →</a>
+          <p class="lead">Ingeniería, salud, educación, derecho, agronomía, tecnología y oficios: el plan se ejecuta con gente del distrito.</p>
+          <a class="btn btn-ink" id="formProfesionales" target="_blank" rel="noopener noreferrer"><svg class="ic"><use href="#i-chart"/></svg>Sumar mi experiencia</a>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="section gallery-section">
-      <div class="section-heading">
-        <span class="kicker">En el territorio</span>
-        <h2>Escuchar cara a cara</h2>
+    <div class="block">
+      <div class="note">
+        <svg class="ic ic-sm"><use href="#i-lock"/></svg>
+        <span><strong>Tus datos.</strong> La aplicación no guarda nombres ni teléfonos. Los registros se hacen en formularios oficiales de Microsoft Forms y son voluntarios: no obligan el sentido del voto ni condicionan ningún beneficio.</span>
       </div>
-      <div class="gallery" aria-label="Galería de actividades">
+    </div>
+  </section>
+
+  <!-- =========================== PROPUESTAS =========================== -->
+  <section class="screen" id="s-propuestas">
+    <div class="block">
+      <div class="block-head">
+        <span class="eyebrow">Plan de gobierno 2027–2030</span>
+        <h2>Cinco compromisos</h2>
+        <p class="lead">Esto es lo que respondes cuando un vecino te pregunta qué propone Jimmy.</p>
+      </div>
+      <div class="stack-lg" id="commitList"></div>
+    </div>
+
+    <div class="block">
+      <a class="row" href="assets/docs/plan-de-gobierno-independencia-2027-2030.pdf" target="_blank" rel="noopener">
+        <span class="row-ic dark"><svg class="ic"><use href="#i-book"/></svg></span>
+        <span class="row-tx"><strong>Plan de Gobierno completo</strong><small>Documento con metas e indicadores verificables</small></span>
+        <span class="row-go"><svg class="ic ic-sm"><use href="#i-right"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============================== JIMMY ============================== -->
+  <section class="screen" id="s-jimmy">
+    <div class="block">
+      <div class="block-head">
+        <span class="eyebrow">Conoce a Jimmy</span>
+        <h2>Primero escuchar.<br />Luego comprometerse.</h2>
+        <p class="lead">Esta aplicación ordena la información territorial, las propuestas y las formas de participación para acercar la campaña a cada ciudadano de Independencia.</p>
+      </div>
+      <div class="gallery">
+        <img src="assets/images/jimmy-2.jpg" alt="Jimmy Isidro en una reunión de campaña" loading="lazy" />
         <img src="assets/images/jimmy-1.jpg" alt="Jimmy Isidro dialogando con vecinos" loading="lazy" />
-        <img src="assets/images/jimmy-2.jpg" alt="Reunión del equipo de Jimmy Isidro" loading="lazy" />
-        <img src="assets/images/jimmy-3.jpg" alt="Jimmy Isidro dialogando en una asamblea" loading="lazy" />
+        <img src="assets/images/jimmy-3.jpg" alt="Jimmy Isidro en una asamblea" loading="lazy" />
         <img src="assets/images/jimmy-4.jpg" alt="Reunión ciudadana con Jimmy Isidro" loading="lazy" />
+        <img src="assets/images/jimmy-5.jpg" alt="Actividad de campaña en el distrito" loading="lazy" />
       </div>
-    </section>
+    </div>
 
-    <section id="documentos" class="section documents section-anchor">
-      <div class="section-heading">
-        <span class="kicker">Transparencia y documentos</span>
-        <h2>Información para verificar</h2>
-        <p>Los documentos completos están disponibles para quienes deseen profundizar. La información principal se presenta directamente en la app.</p>
+    <div class="block">
+      <div class="block-head"><span class="eyebrow">Contacto</span></div>
+      <div class="stack">
+        <a class="row" id="waJimmy" target="_blank" rel="noopener noreferrer">
+          <span class="row-ic gold"><svg class="ic"><use href="#i-chat"/></svg></span>
+          <span class="row-tx"><strong>WhatsApp directo</strong><small id="waNumber">—</small></span>
+          <span class="row-go"><svg class="ic ic-sm"><use href="#i-right"/></svg></span>
+        </a>
+        <a class="row" id="fbJimmy" target="_blank" rel="noopener noreferrer">
+          <span class="row-ic"><svg class="ic"><use href="#i-megaphone"/></svg></span>
+          <span class="row-tx"><strong>Facebook oficial</strong><small>Noticias y actividades de campaña</small></span>
+          <span class="row-go"><svg class="ic ic-sm"><use href="#i-right"/></svg></span>
+        </a>
       </div>
-      <div class="document-grid">
-        <a class="document-card document-featured" href="assets/docs/plan-de-gobierno-independencia-2027-2030.pdf" target="_blank" rel="noopener">
-          <span>📒</span><div><strong>Plan de Gobierno 2027–2030</strong><small>Documento completo con metas e indicadores verificables</small></div><b>›</b>
+    </div>
+
+    <div class="block">
+      <div class="block-head"><span class="eyebrow">Documentos y ajustes</span></div>
+      <div class="stack">
+        <a class="row" href="assets/docs/diagnostico-territorial-independencia.pdf" target="_blank" rel="noopener">
+          <span class="row-ic"><svg class="ic"><use href="#i-doc"/></svg></span>
+          <span class="row-tx"><strong>Diagnóstico territorial</strong><small>Centros poblados, salud, educación, agua y economía</small></span>
+          <span class="row-go"><svg class="ic ic-sm"><use href="#i-right"/></svg></span>
         </a>
-        <a class="document-card" href="assets/docs/diagnostico-territorial-independencia.pdf" target="_blank" rel="noopener">
-          <span>📄</span><div><strong>Diagnóstico territorial</strong><small>Centros poblados, salud, educación, agua y economía</small></div><b>›</b>
+        <a class="row" href="assets/docs/investigacion-integral-independencia.pdf" target="_blank" rel="noopener">
+          <span class="row-ic"><svg class="ic"><use href="#i-book"/></svg></span>
+          <span class="row-tx"><strong>Investigación integral</strong><small>Problemática, economía y prioridades del distrito</small></span>
+          <span class="row-go"><svg class="ic ic-sm"><use href="#i-right"/></svg></span>
         </a>
-        <a class="document-card" href="assets/docs/investigacion-integral-independencia.pdf" target="_blank" rel="noopener">
-          <span>📚</span><div><strong>Investigación integral</strong><small>Problemática, actividades económicas y prioridades</small></div><b>›</b>
-        </a>
-        <button class="document-card" id="installCard" type="button">
-          <span>📲</span><div><strong>Instalar en el celular</strong><small>Acceso directo en Android y iPhone</small></div><b>›</b>
+        <button class="row" id="btnInstall" type="button">
+          <span class="row-ic"><svg class="ic"><use href="#i-install"/></svg></span>
+          <span class="row-tx"><strong>Instalar en el celular</strong><small>Acceso directo en Android y iPhone</small></span>
+          <span class="row-go"><svg class="ic ic-sm"><use href="#i-right"/></svg></span>
         </button>
-        <button class="document-card" id="privacyButton" type="button">
-          <span>🔒</span><div><strong>Privacidad y participación</strong><small>Cómo se protegen los datos y qué no almacena la app</small></div><b>›</b>
+        <button class="row" id="btnPrivacy" type="button">
+          <span class="row-ic"><svg class="ic"><use href="#i-lock"/></svg></span>
+          <span class="row-tx"><strong>Privacidad</strong><small>Qué guarda y qué no guarda esta aplicación</small></span>
+          <span class="row-go"><svg class="ic ic-sm"><use href="#i-right"/></svg></span>
         </button>
       </div>
-    </section>
-
-    <section class="contact-band">
-      <div>
-        <span class="kicker">Contacto directo</span>
-        <h2>¿Quieres conversar con Jimmy?</h2>
-        <p>Escríbele por WhatsApp y comparte esta aplicación con más vecinos de Independencia.</p>
-      </div>
-      <div class="contact-band-actions">
-        <a id="whatsBand" class="btn btn-primary" target="_blank" rel="noopener noreferrer">WhatsApp 981 918 440</a>
-        <button id="shareFinal" class="btn btn-dark" type="button">Compartir app</button>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <strong>Jimmy Isidro</strong>
-    <span>País para Todos · Independencia, Huaraz</span>
-    <a id="facebookFooter" target="_blank" rel="noopener noreferrer">Facebook oficial</a>
-    <small>Aplicación informativa y de participación voluntaria. Versión 3.0.</small>
-  </footer>
-
-  <nav class="bottom-nav" aria-label="Navegación principal">
-    <a href="#inicio" data-section="inicio"><span>⌂</span>Inicio</a>
-    <a href="#mi-zona" data-section="mi-zona"><span>⌖</span>Mi zona</a>
-    <a href="#participa" data-section="participa" class="nav-main"><span>＋</span>Súmate</a>
-    <a href="#propuestas" data-section="propuestas"><span>✓</span>Propuestas</a>
-    <a href="#jimmy" data-section="jimmy"><span>●</span>Jimmy</a>
-  </nav>
-
-
-  <dialog id="territoryDialog" class="modal">
-    <div class="modal-head">
-      <div><span id="modalZone" class="kicker"></span><h2 id="modalTitle"></h2></div>
-      <button id="closeTerritory" class="icon-button" aria-label="Cerrar">×</button>
     </div>
-    <div id="modalContent" class="modal-content"></div>
-  </dialog>
 
-  <dialog id="installDialog" class="modal compact-modal">
-    <div class="modal-head">
-      <div><span class="kicker">Instalación</span><h2>Guarda la app en tu celular</h2></div>
-      <button class="icon-button close-generic" aria-label="Cerrar">×</button>
-    </div>
-    <div class="modal-content install-steps">
-      <h3>Android · Chrome</h3>
-      <p>Presiona <strong>Instalar aplicación</strong> o abre el menú ⋮ y elige <strong>Agregar a la pantalla principal</strong>.</p>
-      <button id="nativeInstall" class="btn btn-primary btn-full" type="button">Instalar aplicación</button>
-      <h3>iPhone · Safari</h3>
-      <p>Presiona <strong>Compartir</strong> y selecciona <strong>Agregar a inicio</strong>.</p>
-    </div>
-  </dialog>
+    <footer class="foot">
+      <img src="assets/images/logo.webp" alt="País para Todos" />
+      <strong>Jimmy Isidro</strong>
+      <span>País para Todos · Independencia, Huaraz, Áncash</span>
+      <small>Aplicación informativa y de participación voluntaria. Versión 5.0.</small>
+    </footer>
+  </section>
 
-  <dialog id="privacyDialog" class="modal compact-modal">
-    <div class="modal-head">
-      <div><span class="kicker">Privacidad</span><h2>Participación voluntaria</h2></div>
-      <button class="icon-button close-generic" aria-label="Cerrar">×</button>
-    </div>
-    <div class="modal-content">
-      <p>Esta aplicación no guarda nombres, teléfonos, preferencias políticas ni respuestas. Los botones de registro abren formularios externos de Microsoft Forms.</p>
-      <p>La selección de “Mi zona” se conserva únicamente en el almacenamiento local del celular y puede borrarse limpiando los datos del navegador.</p>
-      <p>La inscripción no obliga el sentido del voto ni condiciona beneficios. Evita compartir DNI, datos bancarios o fotografías de tu voto dentro de canales públicos.</p>
-    </div>
-  </dialog>
+</main>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+<!-- ============================ NAVEGACIÓN ============================ -->
+<nav class="tabbar" aria-label="Navegación principal">
+  <div class="tabbar-in">
+    <a class="tab on" href="#/inicio" data-tab="inicio"><svg class="ic"><use href="#i-home"/></svg>Inicio</a>
+    <a class="tab" href="#/territorio" data-tab="territorio"><svg class="ic"><use href="#i-target"/></svg>Territorio</a>
+    <a class="tab" href="#/sumate" data-tab="sumate"><svg class="ic"><use href="#i-plus"/></svg>Súmate</a>
+    <a class="tab" href="#/propuestas" data-tab="propuestas"><svg class="ic"><use href="#i-check"/></svg>Propuestas</a>
+    <a class="tab" href="#/jimmy" data-tab="jimmy"><svg class="ic"><use href="#i-user"/></svg>Jimmy</a>
+  </div>
+</nav>
 
-  <script src="config.js"></script>
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+<!-- ============================= DIÁLOGOS ============================= -->
+<dialog class="sheet" id="dlgInstall">
+  <div class="sheet-grip"></div>
+  <div class="sheet-head">
+    <div><span class="eyebrow">Instalación</span><h2>Guarda la app en tu celular</h2></div>
+    <button class="sheet-x" data-close type="button" aria-label="Cerrar"><svg class="ic"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="sheet-body">
+    <h3>Android · Chrome</h3>
+    <p>Presiona el botón de abajo, o abre el menú ⋮ y elige <strong>Agregar a la pantalla principal</strong>.</p>
+    <button class="btn btn-gold" id="btnNativeInstall" type="button"><svg class="ic"><use href="#i-install"/></svg>Instalar aplicación</button>
+    <h3>iPhone · Safari</h3>
+    <p>Presiona el botón <strong>Compartir</strong> de la barra inferior y selecciona <strong>Agregar a inicio</strong>.</p>
+  </div>
+</dialog>
+
+<dialog class="sheet" id="dlgPrivacy">
+  <div class="sheet-grip"></div>
+  <div class="sheet-head">
+    <div><span class="eyebrow">Privacidad</span><h2>Participación voluntaria</h2></div>
+    <button class="sheet-x" data-close type="button" aria-label="Cerrar"><svg class="ic"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="sheet-body">
+    <p>Esta aplicación no guarda nombres, teléfonos, preferencias políticas ni respuestas. Los botones de registro abren formularios externos de Microsoft Forms.</p>
+    <p>La zona que elijas se conserva solo en el almacenamiento local de tu celular y puedes borrarla limpiando los datos del navegador.</p>
+    <p>La inscripción no obliga el sentido del voto ni condiciona beneficios. Evita compartir tu DNI, datos bancarios o fotografías de tu voto en canales públicos.</p>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

@@ -1,276 +1,381 @@
-(() => {
-  const config = window.APP_CONFIG;
-  const data = window.TERRITORY_DATA;
-  const $ = (sel, root = document) => root.querySelector(sel);
-  const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+/* ============================================================================
+   JIMMY ISIDRO · INDEPENDENCIA — app.js v5
+   Navegación por pantallas. Una tarea por vista. Sin dependencias externas.
+   ========================================================================== */
+(function () {
+  "use strict";
 
-  const zoneGrid = $("#zoneGrid");
-  const commitmentGrid = $("#commitmentGrid");
-  const dialog = $("#territoryDialog");
-  const modalZone = $("#modalZone");
-  const modalTitle = $("#modalTitle");
-  const modalContent = $("#modalContent");
-  const toast = $("#toast");
-  const zoneSelect = $("#zoneSelect");
-  const centerSelect = $("#centerSelect");
-  const savedZonePanel = $("#savedZonePanel");
-  let deferredPrompt = null;
+  var CFG   = window.APP_CONFIG || {};
+  var DATA  = window.TERRITORY_DATA || {};
+  var ZONES = DATA.zones || [];
 
-  function escapeHtml(value = "") {
-    return String(value).replace(/[&<>'"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#039;",'"':"&quot;"}[ch]));
+  var $  = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  var TITULOS = {
+    inicio: "Inicio", territorio: "Territorio", sumate: "Súmate",
+    propuestas: "Propuestas", jimmy: "Jimmy Isidro"
+  };
+  var RAIZ = ["inicio", "territorio", "sumate", "propuestas", "jimmy"];
+
+  /* Los datos traen emojis; aquí se traducen al juego de iconos dibujado. */
+  var ICONOS = {
+    "💧": "i-drop", "🛡️": "i-shield", "🛡": "i-shield", "📍": "i-pin",
+    "📈": "i-chart", "❤️": "i-heart", "❤": "i-heart", "🧠": "i-users",
+    "🗳️": "i-shield", "🤝": "i-users", "🏔️": "i-map", "⛰️": "i-map", "🏙️": "i-map"
+  };
+  function icono(emoji, alterno) {
+    return ICONOS[String(emoji || "").trim()] || alterno || "i-check";
+  }
+  function svgIcono(id, clase) {
+    return '<svg class="ic ' + (clase || "") + '" aria-hidden="true"><use href="#' + id + '"/></svg>';
   }
 
-  function showToast(message) {
-    toast.textContent = message;
-    toast.classList.add("show");
-    clearTimeout(showToast.timer);
-    showToast.timer = setTimeout(() => toast.classList.remove("show"), 2600);
+  /* ------------------------------------------------------------ utilidades */
+  function esc(v) {
+    return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function norm(t) {
+    return String(t || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  var toastId;
+  function toast(msg) {
+    var t = $("#toast");
+    t.innerHTML = svgIcono("i-check", "ic-sm") + "<span>" + esc(msg) + "</span>";
+    t.classList.add("on");
+    clearTimeout(toastId);
+    toastId = setTimeout(function () { t.classList.remove("on"); }, 2800);
+  }
+  function store(k, v) {
+    try {
+      if (v === undefined) return localStorage.getItem(k);
+      localStorage.setItem(k, v);
+    } catch (e) { return null; }
+  }
+  function wa(text) {
+    var n = (CFG.whatsappNumber || "").replace(/\D/g, "");
+    return "https://wa.me/" + n + "?text=" + encodeURIComponent(text || CFG.whatsappText || "");
+  }
+  function zonaPorId(id) {
+    for (var i = 0; i < ZONES.length; i++) if (ZONES[i].id === id) return ZONES[i];
+    return null;
   }
 
-  function buildWhatsAppUrl(text = config.whatsappText) {
-    return `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(text)}`;
+  /* -------------------------------------------------- arte: curvas de nivel
+     Cada zona tiene su propio relieve. Es decoración de fondo: nunca lleva
+     texto encima y siempre queda en el tercio derecho de la tarjeta.        */
+  function arte(id) {
+    if (id === "blanca") {
+      return '<svg viewBox="0 0 200 140" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">' +
+        '<g fill="none" stroke="#7FA0BE" stroke-width="1.1" opacity=".45">' +
+          '<path d="M0,58 C34,44 52,66 84,50 C118,33 132,16 168,26 C186,31 194,38 200,42"/>' +
+          '<path d="M0,74 C34,60 52,82 84,66 C118,49 132,32 168,42 C186,47 194,54 200,58"/></g>' +
+        '<path d="M0,140 L0,104 L36,64 L60,94 L98,36 L136,88 L166,56 L200,90 L200,140 Z" fill="#A8C4DC" opacity=".5"/>' +
+        '<path d="M98,36 L116,60 L80,60 Z M36,64 L50,82 L22,82 Z M166,56 L180,74 L152,74 Z" fill="#FFFFFF"/></svg>';
+    }
+    if (id === "negra") {
+      return '<svg viewBox="0 0 200 140" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">' +
+        '<g fill="none" stroke="#F5C400" stroke-width="1.1" opacity=".22">' +
+          '<path d="M0,54 C34,40 52,62 84,46 C118,29 132,12 168,22 C186,27 194,34 200,38"/>' +
+          '<path d="M0,72 C34,58 52,80 84,64 C118,47 132,30 168,40 C186,45 194,52 200,56"/></g>' +
+        '<path d="M0,140 L0,110 L34,72 L62,102 L96,48 L130,94 L200,58 L200,140 Z" fill="#000000" opacity=".34"/>' +
+        '<path d="M0,140 L0,124 L40,100 L74,120 L110,86 L146,112 L200,88 L200,140 Z" fill="#000000" opacity=".3"/></svg>';
+    }
+    return '<svg viewBox="0 0 200 140" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">' +
+      '<g fill="none" stroke="#8A6D00" stroke-width="1.1" opacity=".28">' +
+        '<path d="M0,46 C34,32 52,54 84,38 C118,21 132,6 168,16 C186,21 194,26 200,30"/>' +
+        '<path d="M0,64 C34,50 52,72 84,56 C118,39 132,24 168,34 C186,39 194,44 200,48"/></g>' +
+      '<g fill="#7A6200" opacity=".26">' +
+        '<rect x="6" y="86" width="26" height="54" rx="2"/><rect x="40" y="66" width="30" height="74" rx="2"/>' +
+        '<rect x="78" y="98" width="24" height="42" rx="2"/><rect x="110" y="54" width="32" height="86" rx="2"/>' +
+        '<rect x="150" y="80" width="26" height="60" rx="2"/><rect x="182" y="66" width="18" height="74" rx="2"/></g></svg>';
   }
 
-  function renderZones() {
-    zoneGrid.innerHTML = data.zones.map(zone => `
-      <button class="zone-card" type="button" data-zone="${escapeHtml(zone.id)}">
-        <span class="zone-card-icon" aria-hidden="true">${zone.icon}</span>
-        <span class="zone-card-content">
-          <h3>${escapeHtml(zone.name)}</h3>
-          <p>${escapeHtml(zone.description)}</p>
-          <span class="zone-count">${zone.centers.length} territorios</span>
-        </span>
-      </button>
-    `).join("");
+  /* ------------------------------------------------------------- pintar UI */
+  function pintarZonas() {
+    $("#zoneCards").innerHTML = ZONES.map(function (z) {
+      var n = (z.centers || []).length;
+      return '<a class="zone z-' + esc(z.id) + '" href="#/zona/' + esc(z.id) + '">' +
+        '<span class="zone-art">' + arte(z.id) + '</span>' +
+        '<span class="zone-in"><span class="eyebrow">Zona</span>' +
+        "<h3>" + esc(z.name) + "</h3>" +
+        '<span class="zone-meta">' + n + (n === 1 ? " territorio" : " territorios") +
+        svgIcono("i-right", "ic-sm") + "</span></span></a>";
+    }).join("");
   }
 
-  function centerMarkup(center) {
-    const population = center.population ? `${escapeHtml(center.population)} habitantes` : "Población en actualización";
-    return `
-      <details class="center-card">
-        <summary><span>${escapeHtml(center.name)}</span></summary>
-        <div class="center-card-body">
-          <div class="center-meta">
-            <span class="badge pending">${population}</span>
-            <span class="badge">${escapeHtml(center.status)}</span>
-          </div>
-          <h4>Localidades vinculadas</h4>
-          <ul>${center.localities.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
-          <h4>Necesidades prioritarias preliminares</h4>
-          <ul>${center.needs.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
-        </div>
-      </details>`;
+  function pintarLista(zid) {
+    var z = zonaPorId(zid);
+    if (!z) { location.hash = "#/territorio"; return; }
+    $("#listaTitulo").textContent = z.name;
+    $("#listaDesc").textContent = z.description || "";
+    $("#listaItems").innerHTML = (z.centers || []).map(function (c, i) {
+      var n = (c.localities || []).length;
+      return '<a class="row" href="#/ficha/' + esc(z.id) + "/" + i + '">' +
+        '<span class="row-idx num">' + (i + 1 < 10 ? "0" : "") + (i + 1) + "</span>" +
+        '<span class="row-tx"><strong>' + esc(c.name) + "</strong><small>" +
+        (n ? n + (n === 1 ? " localidad vinculada" : " localidades vinculadas") : "Padrón en actualización") +
+        "</small></span>" + '<span class="row-go">' + svgIcono("i-right", "ic-sm") + "</span></a>";
+    }).join("");
+    return z.name;
   }
 
-  function openZone(zoneId, focusCenter = "") {
-    const zone = data.zones.find(z => z.id === zoneId);
-    if (!zone) return;
-    modalZone.textContent = `${zone.icon} ${zone.name}`;
-    modalTitle.textContent = "Territorios y necesidades";
-    modalContent.innerHTML = `
-      <p>${escapeHtml(zone.description)}</p>
-      <div class="center-list">${zone.centers.map(centerMarkup).join("")}</div>
-      <div class="data-note"><strong>Importante:</strong> esta ficha es informativa y preliminar. Las prioridades serán validadas con fuentes oficiales y trabajo territorial.</div>
-    `;
-    dialog.showModal();
-    document.body.style.overflow = "hidden";
-    if (focusCenter) {
-      const details = $$("details", modalContent).find(d => $("summary span", d)?.textContent === focusCenter);
-      if (details) {
-        details.open = true;
-        setTimeout(() => details.scrollIntoView({behavior:"smooth", block:"start"}), 120);
-      }
+  var fichaActual = null;
+  function pintarFicha(zid, idx) {
+    var z = zonaPorId(zid);
+    var c = z && z.centers ? z.centers[idx] : null;
+    if (!c) { location.hash = "#/territorio"; return; }
+    fichaActual = { zid: zid, idx: idx, zona: z.name, nombre: c.name };
+
+    var hero = $("#fichaHero");
+    hero.className = "ficha-hero fh-" + z.id;
+    var art = hero.querySelector(".ficha-art");
+    if (art) art.remove();
+    hero.insertAdjacentHTML("afterbegin", '<span class="ficha-art">' + arte(z.id) + "</span>");
+
+    $("#fichaZona").textContent = z.name;
+    $("#fichaNombre").textContent = c.name;
+    $("#fichaEstado").innerHTML = svgIcono("i-info", "ic-sm") + esc(c.status || "Información en validación");
+
+    var locs = (c.localities && c.localities.length) ? c.localities : ["Localidades en actualización oficial"];
+    $("#fichaLocs").innerHTML = locs.map(function (l) {
+      return '<span class="chip">' + esc(l) + "</span>";
+    }).join("");
+
+    $("#fichaNeeds").innerHTML = (c.needs || []).map(function (n) {
+      return "<li>" + esc(n) + "</li>";
+    }).join("");
+
+    var d = DATA.district || {};
+    $("#fichaNota").innerHTML =
+      "<strong>Población:</strong> el Censo " + esc(d.censusYear || "2017") + " registró " +
+      esc(d.censusPopulation || "76 088") + " habitantes en todo el distrito (" +
+      esc(d.urbanShare || "84,93 %") + " urbanos). Todavía no existe una cifra oficial desagregada por " +
+      "centro poblado o barrio. " + esc(d.note || "");
+
+    return c.name;
+  }
+
+  function pintarCompromisos() {
+    $("#commitList").innerHTML = (DATA.commitments || []).map(function (c) {
+      return '<div class="card"><div class="commit">' +
+        '<span class="commit-ic">' + svgIcono(icono(c.icon), "ic-lg") + "</span>" +
+        '<span class="commit-tx"><h3>' + esc(c.title) + "</h3>" +
+        '<p class="lead">' + esc(c.text) + "</p></span></div></div>";
+    }).join("");
+  }
+
+  /* --------------------------------------------------------------- búsqueda */
+  function buscar(term) {
+    var q = norm(term).trim();
+    var out = $("#results");
+    if (q.length < 2) { out.innerHTML = ""; return; }
+
+    var hits = [];
+    ZONES.forEach(function (z) {
+      (z.centers || []).forEach(function (c, i) {
+        var campos = [c.name].concat(c.localities || []);
+        if (campos.some(function (t) { return norm(t).indexOf(q) !== -1; }) && hits.length < 8) {
+          var sub = (c.localities || []).filter(function (t) { return norm(t).indexOf(q) !== -1; })[0];
+          hits.push({ z: z, c: c, i: i, sub: (sub && norm(sub) !== norm(c.name)) ? sub : z.name });
+        }
+      });
+    });
+
+    out.innerHTML = hits.length
+      ? hits.map(function (h) {
+          return '<a class="row" href="#/ficha/' + esc(h.z.id) + "/" + h.i + '">' +
+            '<span class="row-ic">' + svgIcono("i-pin") + "</span>" +
+            '<span class="row-tx"><strong>' + esc(h.c.name) + "</strong><small>" + esc(h.sub) + "</small></span>" +
+            '<span class="row-go">' + svgIcono("i-right", "ic-sm") + "</span></a>";
+        }).join("")
+      : '<div class="note note-quiet">' + svgIcono("i-info", "ic-sm") +
+        "<span>No encontramos ese nombre todavía. El padrón sigue en construcción: escríbenos por WhatsApp y lo agregamos.</span></div>";
+  }
+
+  /* ---------------------------------------------------------------- mi zona */
+  function leerZonaGuardada() {
+    try { return JSON.parse(store("jimmyIsidroMyZone") || "null"); } catch (e) { return null; }
+  }
+  function pintarZonaGuardada() {
+    var s = leerZonaGuardada();
+    var b = $("#savedBlock");
+    if (!s || !s.nombre) { b.hidden = true; return; }
+    b.hidden = false;
+    $("#savedName").textContent = s.nombre;
+    $("#savedParent").textContent = s.zona;
+    $("#rowSaved").onclick = function () { location.hash = "#/ficha/" + s.zid + "/" + s.idx; };
+  }
+
+  /* --------------------------------------------------------------- enrutado */
+  function mostrar(id) {
+    $$(".screen").forEach(function (s) { s.classList.toggle("on", s.id === "s-" + id); });
+  }
+  function marcarTab(t) {
+    $$(".tab").forEach(function (x) { x.classList.toggle("on", x.dataset.tab === t); });
+  }
+
+  function router() {
+    var p = (location.hash || "#/inicio").replace(/^#\/?/, "").split("/");
+    var vista = p[0] || "inicio";
+
+    if (vista === "zona") {
+      var nz = pintarLista(p[1]);
+      if (nz === undefined) return;
+      mostrar("lista");
+      document.body.dataset.nivel = "detalle";
+      $("#barTitle").textContent = nz;
+      marcarTab("territorio");
+      $("#btnBack").dataset.to = "#/territorio";
+
+    } else if (vista === "ficha") {
+      var nf = pintarFicha(p[1], parseInt(p[2], 10));
+      if (nf === undefined) return;
+      mostrar("ficha");
+      document.body.dataset.nivel = "detalle";
+      $("#barTitle").textContent = nf;
+      marcarTab("territorio");
+      $("#btnBack").dataset.to = "#/zona/" + p[1];
+
+    } else {
+      if (RAIZ.indexOf(vista) === -1) vista = "inicio";
+      mostrar(vista);
+      document.body.dataset.nivel = "raiz";
+      $("#barTitle").textContent = TITULOS[vista];
+      marcarTab(vista);
+      if (vista === "inicio") pintarZonaGuardada();
+    }
+    window.scrollTo(0, 0);
+  }
+
+  /* -------------------------------------------------------------- compartir */
+  function compartir(titulo, texto) {
+    var url = location.href.split("#")[0];
+    if (navigator.share) {
+      navigator.share({ title: titulo, text: texto, url: url }).catch(function () {});
+      return;
+    }
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(texto + " " + url).then(function () {
+        toast("Enlace copiado. Pégalo en WhatsApp.");
+      });
+    } else {
+      window.open(wa(texto + " " + url), "_blank", "noopener");
     }
   }
 
-  function closeDialog(dlg) {
-    if (dlg?.open) dlg.close();
-    document.body.style.overflow = "";
-  }
-
-  function renderCommitments() {
-    commitmentGrid.innerHTML = data.commitments.map(item => `
-      <article class="commitment-card">
-        <span aria-hidden="true">${item.icon}</span>
-        <div><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></div>
-      </article>
-    `).join("");
-  }
-
-  function bindForms() {
-    $("#formPersoneros").href = config.forms.personeros;
-    $("#formSimpatizantes").href = config.forms.simpatizantes;
-    $("#formVoteSecureQuick").href = config.forms.simpatizantes;
-    $("#formProfesionales").href = config.forms.profesionales;
-  }
-
-  function bindExternalLinks() {
-    ["#whatsHero", "#whatsQuick", "#whatsStory", "#whatsBand"].forEach(sel => {
-      const el = $(sel);
-      if (el) el.href = buildWhatsAppUrl();
+  /* ------------------------------------------------------------ instalación */
+  var diferido = null;
+  function setupInstall() {
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      diferido = e;
+      $("#btnInstallTop").hidden = false;
     });
-    ["#facebookQuick", "#facebookStory", "#facebookFooter"].forEach(sel => {
-      const el = $(sel);
-      if (el) el.href = config.facebookUrl;
+    window.addEventListener("appinstalled", function () {
+      diferido = null;
+      $("#btnInstallTop").hidden = true;
+      toast("Aplicación instalada correctamente.");
     });
-  }
-
-  const allTerritories = data.zones.flatMap(zone => zone.centers.map(center => ({zone, center})));
-  function normalize(text) {
-    return String(text).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  }
-
-  function setupSearch() {
-    const input = $("#territorySearch");
-    const results = $("#searchResults");
-    input.addEventListener("input", () => {
-      const q = normalize(input.value.trim());
-      if (q.length < 2) { results.hidden = true; results.innerHTML = ""; return; }
-      const found = allTerritories.filter(({center}) => {
-        const haystack = normalize([center.name, ...center.localities, ...center.needs].join(" "));
-        return haystack.includes(q);
-      }).slice(0, 12);
-      results.innerHTML = found.length ? found.map(({zone, center}) => `
-        <button class="search-result" type="button" data-zone="${zone.id}" data-center="${escapeHtml(center.name)}">
-          <span><strong>${escapeHtml(center.name)}</strong><small>${escapeHtml(zone.name)}</small></span><span>→</span>
-        </button>
-      `).join("") : `<div class="search-result"><span><strong>No encontramos coincidencias.</strong><small>Prueba con otro nombre o sector.</small></span></div>`;
-      results.hidden = false;
-    });
-    results.addEventListener("click", event => {
-      const button = event.target.closest("button[data-zone]");
-      if (!button) return;
-      openZone(button.dataset.zone, button.dataset.center);
-      results.hidden = true;
-    });
-  }
-
-  function populateZoneSelectors() {
-    zoneSelect.innerHTML = `<option value="">Seleccionar zona</option>` + data.zones.map(zone => `<option value="${escapeHtml(zone.id)}">${escapeHtml(zone.name)}</option>`).join("");
-
-    zoneSelect.addEventListener("change", () => {
-      const zone = data.zones.find(item => item.id === zoneSelect.value);
-      centerSelect.innerHTML = `<option value="">Seleccionar territorio</option>`;
-      centerSelect.disabled = !zone;
-      if (!zone) return;
-      centerSelect.innerHTML += zone.centers.map(center => `<option value="${escapeHtml(center.name)}">${escapeHtml(center.name)}</option>`).join("");
-    });
-
-    $("#saveZone").addEventListener("click", () => {
-      if (!zoneSelect.value || !centerSelect.value) {
-        showToast("Selecciona una zona y un territorio.");
+    $("#btnNativeInstall").addEventListener("click", function () {
+      if (!diferido) {
+        toast("Usa el menú del navegador: Agregar a la pantalla principal.");
         return;
       }
-      const selection = {zoneId: zoneSelect.value, centerName: centerSelect.value};
-      localStorage.setItem("jimmyIsidroMyZone", JSON.stringify(selection));
-      renderSavedZone(selection);
-      showToast("Tu zona quedó guardada en este celular.");
-    });
-
-    $("#openSavedZone").addEventListener("click", () => {
-      const saved = getSavedZone();
-      if (saved) openZone(saved.zoneId, saved.centerName);
-    });
-
-    const saved = getSavedZone();
-    if (saved) {
-      zoneSelect.value = saved.zoneId;
-      zoneSelect.dispatchEvent(new Event("change"));
-      centerSelect.value = saved.centerName;
-      renderSavedZone(saved);
-    }
-  }
-
-  function getSavedZone() {
-    try {
-      const saved = JSON.parse(localStorage.getItem("jimmyIsidroMyZone"));
-      if (!saved?.zoneId || !saved?.centerName) return null;
-      return saved;
-    } catch {
-      return null;
-    }
-  }
-
-  function renderSavedZone(selection) {
-    const zone = data.zones.find(item => item.id === selection.zoneId);
-    const center = zone?.centers.find(item => item.name === selection.centerName);
-    if (!zone || !center) return;
-    $("#savedZoneName").textContent = center.name;
-    $("#savedZoneParent").textContent = zone.name;
-    savedZonePanel.hidden = false;
-  }
-
-  async function shareApp(mode = "general") {
-    const url = location.protocol.startsWith("http") ? location.href.split("#")[0] : config.facebookUrl;
-    const messages = {
-      general: `Conoce la aplicación ciudadana de Jimmy Isidro para Independencia: territorios, propuestas y formas de participación. ${url}`,
-      chain: `Te invito a conocer la aplicación de Jimmy Isidro. Encuentra tu barrio o centro poblado y conoce las propuestas para Independencia. ${url}`
-    };
-    const text = messages[mode];
-    if (navigator.share) {
-      try { await navigator.share({title:"Jimmy Isidro | Independencia", text, url}); return; } catch (e) { if (e.name === "AbortError") return; }
-    }
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
-  }
-
-  function setupInstall() {
-    const installDialog = $("#installDialog");
-    [$("#installCard"), $("#installTop")].forEach(btn => btn?.addEventListener("click", () => installDialog.showModal()));
-    $("#nativeInstall").addEventListener("click", async () => {
-      if (!deferredPrompt) { showToast("En iPhone usa Safari → Compartir → Agregar a inicio."); return; }
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      $("#installTop").hidden = true;
-      closeDialog(installDialog);
-    });
-    window.addEventListener("beforeinstallprompt", event => {
-      event.preventDefault();
-      deferredPrompt = event;
-      $("#installTop").hidden = false;
-    });
-    window.addEventListener("appinstalled", () => showToast("Aplicación instalada correctamente."));
-  }
-
-  function setupNavigation() {
-    const links = $$(".bottom-nav a");
-    const sections = links.map(a => document.getElementById(a.dataset.section)).filter(Boolean);
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) links.forEach(a => a.classList.toggle("active", a.dataset.section === entry.target.id));
+      diferido.prompt();
+      diferido.userChoice.finally(function () {
+        diferido = null;
+        $("#dlgInstall").close();
       });
-    }, {rootMargin:"-42% 0px -48% 0px", threshold:0});
-    sections.forEach(section => observer.observe(section));
-  }
-
-
-  function setupEvents() {
-    zoneGrid.addEventListener("click", event => {
-      const card = event.target.closest("[data-zone]");
-      if (card) openZone(card.dataset.zone);
     });
-    $("#closeTerritory").addEventListener("click", () => closeDialog(dialog));
-    dialog.addEventListener("click", event => { if (event.target === dialog) closeDialog(dialog); });
-    $$(".close-generic").forEach(btn => btn.addEventListener("click", () => closeDialog(btn.closest("dialog"))));
-    $$("dialog").forEach(dlg => dlg.addEventListener("click", event => { if (event.target === dlg) closeDialog(dlg); }));
-    $("#privacyButton").addEventListener("click", () => $("#privacyDialog").showModal());
-    $("#shareHero").addEventListener("click", () => shareApp("general"));
-    $("#shareFinal").addEventListener("click", () => shareApp("general"));
-    $("#shareChain").addEventListener("click", () => shareApp("chain"));
   }
 
-  function registerServiceWorker() {
-    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(() => {});
+  /* ---------------------------------------------------------------- enlaces */
+  function enlazar() {
+    var f = CFG.forms || {};
+    var set = function (sel, href) { var el = $(sel); if (el && href) el.href = href; };
+
+    set("#formPersoneros", f.personeros);
+    set("#formSimpatizantes", f.simpatizantes);
+    set("#formProfesionales", f.profesionales);
+    set("#btnFichaSumar", f.simpatizantes);
+    set("#fbJimmy", CFG.facebookUrl);
+    set("#waHero", wa());
+    set("#waJimmy", wa());
+
+    var n = (CFG.whatsappNumber || "").replace(/\D/g, "").replace(/^51/, "");
+    $("#waNumber").textContent = n.length === 9
+      ? n.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3")
+      : "Escríbele directamente";
   }
 
-  renderZones();
-  renderCommitments();
-  bindForms();
-  bindExternalLinks();
-  setupSearch();
-  populateZoneSelectors();
-  setupInstall();
-  setupNavigation();
-  setupEvents();
-  registerServiceWorker();
+  /* ----------------------------------------------------------------- eventos */
+  function eventos() {
+    window.addEventListener("hashchange", router);
+
+    $("#btnBack").addEventListener("click", function () {
+      location.hash = this.dataset.to || "#/territorio";
+    });
+
+    var tId;
+    $("#q").addEventListener("input", function () {
+      var v = this.value;
+      clearTimeout(tId);
+      tId = setTimeout(function () { buscar(v); }, 130);
+    });
+
+    $("#btnGuardarZona").addEventListener("click", function () {
+      if (!fichaActual) return;
+      store("jimmyIsidroMyZone", JSON.stringify(fichaActual));
+      pintarZonaGuardada();
+      toast(fichaActual.nombre + " es ahora tu zona.");
+    });
+
+    $("#btnFichaShare").addEventListener("click", function () {
+      if (!fichaActual) return;
+      compartir("Ficha de " + fichaActual.nombre,
+        "Mira la ficha de " + fichaActual.nombre + " (" + fichaActual.zona +
+        ") en la app de Jimmy Isidro para Independencia:");
+    });
+
+    $("#btnShareHome").addEventListener("click", function () {
+      compartir("Jimmy Isidro · Independencia",
+        "Descarga la app de Jimmy Isidro: encuentra tu caserío o barrio y conoce las propuestas para Independencia.");
+    });
+
+    $("#btnInstall").addEventListener("click", function () { $("#dlgInstall").showModal(); });
+    $("#btnInstallTop").addEventListener("click", function () { $("#dlgInstall").showModal(); });
+    $("#btnPrivacy").addEventListener("click", function () { $("#dlgPrivacy").showModal(); });
+
+    $$("[data-close]").forEach(function (b) {
+      b.addEventListener("click", function () { b.closest("dialog").close(); });
+    });
+    $$("dialog").forEach(function (d) {
+      d.addEventListener("click", function (e) { if (e.target === d) d.close(); });
+    });
+  }
+
+  /* -------------------------------------------------------------------- init */
+  function init() {
+    enlazar();
+    pintarZonas();
+    pintarCompromisos();
+    eventos();
+    setupInstall();
+    router();
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("sw.js").catch(function () {});
+      });
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 })();
