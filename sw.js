@@ -1,9 +1,10 @@
-const CACHE = "jimmy-isidro-v5.0.3";
+const CACHE = "jimmy-isidro-v5.1.0";
 const APP_SHELL = [
   "./", "./index.html", "./styles.css", "./app.js", "./config.js", "./data.js",
   "./manifest.webmanifest",
   "./assets/fonts/archivo.woff2",
   "./assets/images/logo.webp", "./assets/images/jimmy-portada-frontal.webp",
+  "./assets/images/poster-jimmy-te-visita.jpg", "./assets/videos/jimmy-isidro-te-visita.mp4",
   "./assets/icons/icon-192.png", "./assets/icons/icon-512.png", "./assets/icons/apple-touch-icon.png"
 ];
 self.addEventListener("install", e => e.waitUntil(
