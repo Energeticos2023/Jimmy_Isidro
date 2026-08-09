@@ -1,4 +1,4 @@
-const CACHE = "jimmy-isidro-v5.0.2";
+const CACHE = "jimmy-isidro-v5.0.3";
 const APP_SHELL = [
   "./", "./index.html", "./styles.css", "./app.js", "./config.js", "./data.js",
   "./manifest.webmanifest",
