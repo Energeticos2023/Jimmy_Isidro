@@ -305,6 +305,7 @@
     set("#waGroupHome", CFG.whatsappGroupUrl);
     set("#waGroupJoin", CFG.whatsappGroupUrl);
     set("#waGroupJimmy", CFG.whatsappGroupUrl);
+    set("#waVisit", wa("Hola, Jimmy. Quiero invitarte a visitar mi hogar, barrio o comunidad para conversar con mis vecinos, contarte nuestras necesidades y conocer tus propuestas para Independencia. Mi zona es: "));
     set("#waHero", wa());
     set("#waJimmy", wa());
 
