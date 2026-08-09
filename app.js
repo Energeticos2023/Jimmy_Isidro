@@ -302,6 +302,9 @@
     set("#formProfesionales", f.profesionales);
     set("#btnFichaSumar", f.simpatizantes);
     set("#fbJimmy", CFG.facebookUrl);
+    set("#waGroupHome", CFG.whatsappGroupUrl);
+    set("#waGroupJoin", CFG.whatsappGroupUrl);
+    set("#waGroupJimmy", CFG.whatsappGroupUrl);
     set("#waHero", wa());
     set("#waJimmy", wa());
 
