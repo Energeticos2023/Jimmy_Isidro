@@ -444,3 +444,6 @@ dialog.sheet::backdrop{background:rgba(13,20,28,.6);backdrop-filter:blur(2px)}
 }
 .campaign-video{width:min(100%,360px);margin:18px auto;border-radius:18px;overflow:hidden;background:#05090d;box-shadow:0 16px 36px rgba(0,0,0,.3);aspect-ratio:9/16}
 .campaign-video video{display:block;width:100%;height:100%;object-fit:contain;background:#05090d}
+.app-qr{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;width:min(100%,280px);margin:20px auto;color:#fff;text-decoration:none}
+.app-qr img{display:block;width:100%;height:auto;padding:12px;border-radius:22px;background:#fff;box-shadow:0 14px 32px rgba(0,0,0,.28)}
+.app-qr span{font-size:14px;font-weight:750;letter-spacing:.04em;text-transform:uppercase;color:var(--gold)}
